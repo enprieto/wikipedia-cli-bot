@@ -18,6 +18,7 @@ you are now in the "page" menu. select the number to view the summary, sections,
 entering the summary options will print the page summary and list the page menu
 entering the sections option will take you to the sections menu. See wikipedia.py bug below.
 entering the links options will print the links and list the page menu
+entering the content option will print the entire page in plaintext and list the page menu
 entering the back option will go back to the search menu
 
 ## sections menu.

@@ -44,6 +44,7 @@ def chatbot():
                     print("1. Page Summary")
                     print("2. Page Sections")
                     print("3. Page Links")
+                    print("4. Page content")
                     print("0. Back")
 
                     choice = input(input_text).strip()
@@ -70,5 +71,8 @@ def chatbot():
                     elif choice == "3":
                         print("Links for '" + page.title + "':")
                         print(page.links)
+                    elif choice == "4":
+                        print("Content for '" + page.title + "':")
+                        print(page.content)
 
 chatbot()
