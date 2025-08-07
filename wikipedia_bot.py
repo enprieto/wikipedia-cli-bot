@@ -44,9 +44,10 @@ def page_sections():
     print("0. Back")
 
 def page_section(section_choice):
-    section = current_page['sections'][section_choice - 1]
-    print(f"\n{current_page['title']} : {section}\n")
-    print(current_page['page'].section(section))
+    if 1 <= section_choice <= len(current_page['sections']):
+        section = current_page['sections'][section_choice - 1]
+        print(f"\n{current_page['title']} : {section}\n")
+        print(current_page['page'].section(section))
 
 
 def chatbot():
@@ -70,24 +71,22 @@ def chatbot():
 
                 choice = input(input_prompt).strip()
 
-                if choice == "0": # Exit to main chatbot loop for a new search
-                    break  
-                elif choice == "1": # Page Summary
+                if choice == "1": # Page Summary
                     page_summary()
                 elif choice == "2": # Page sections
                     while True:
                         page_sections()
                         section_choice = int(input(input_prompt))
-                        if section_choice == 0: # Show the menu again
-                            break  
-                        else:
-                            page_section(section_choice)
-                            break
+                        if section_choice >= 1:
+                            page_section(section_choice)  
+                        break
                 elif choice == "3":
                     print("Links for '" + current_page['title'] + "':")
                     print(current_page['page'].links)
                 elif choice == "4":
                     print("Content for '" + current_page['title'] + "':")
                     print(current_page['page'].content)
+                else:
+                    break
 
 chatbot()
