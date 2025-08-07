@@ -20,7 +20,7 @@ entering the sections option will take you to the sections menu. See wikipedia.p
 entering the links options will print the links and list the page menu
 entering the back option will go back to the search menu
 
-##sections menu.
+## sections menu.
 you are now in the sections menu. the sections are listed numerically.
 select back option to go back to the page menu
 select the number to view the contents of that section. doesn't always work.
