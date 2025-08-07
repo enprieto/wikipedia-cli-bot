@@ -1,6 +1,7 @@
 import wikipedia
 
 input_prompt = "\n>>> "
+current_page = {}
 
 def random():
     random_pages = wikipedia.random(pages=10)
@@ -9,6 +10,8 @@ def random():
 
 
 def get_page(query):
+    global current_page
+    current_page = {}
     titles = wikipedia.search(query, results=5)
     if not titles:
         print("I couldn't find any matching Wikipedia pages.")
@@ -18,26 +21,32 @@ def get_page(query):
     for i, title in enumerate(titles, 1):
         print(f"{i}. {title}")
 
-    while True:
-            page_choice = int(input(input_prompt))
-            selected_title = titles[page_choice - 1]
-            page = wikipedia.page(selected_title, auto_suggest=False)
-            return page
+    page_choice = int(input(input_prompt))
+    selected_title = titles[page_choice - 1]
+    wikipediaPage = wikipedia.page(selected_title, auto_suggest=False)
+    current_page['page'] = wikipediaPage
+    current_page['title'] = wikipediaPage.title
 
-def page_summary(page):
-    print(f"\n{page.title} / Summary:\n")
-    print(page.summary)
+def page_summary():
+    global current_page
+    if 'summary' not in current_page:
+        current_page['summary'] = current_page['page'].summary
+    print(f"\n{current_page['title']} / Summary:\n")
+    print(current_page['summary'])
 
-def page_sections(page):
-    print(f"\n{page.title} / Sections:\n")
-    for i, section in enumerate(page.sections, 1):
+def page_sections():
+    global current_page
+    if 'sections' not in current_page:
+        current_page['sections'] = current_page['page'].sections
+    print(f"\n{current_page['title']} / Sections:\n")
+    for i, section in enumerate(current_page['sections'], 1):
         print(f"{i}. {section}")
     print("0. Back")
 
-def page_section(page, section_choice):
-    section = page.sections[section_choice - 1]
-    print(f"\n{page.title} : {section}\n")
-    print(page.section(section))
+def page_section(section_choice):
+    section = current_page['sections'][section_choice - 1]
+    print(f"\n{current_page['title']} : {section}\n")
+    print(current_page['page'].section(section))
 
 
 def chatbot():
@@ -50,36 +59,35 @@ def chatbot():
         elif user_input in ["random"]:
             random()
         else:
-            page = get_page(user_input)
-            if page:
-                while True:
-                    print(f"\nPage menu for '{page.title}':")
-                    print("1. Page Summary")
-                    print("2. Page Sections")
-                    print("3. Page Links")
-                    print("4. Page content")
-                    print("0. Back")
+            get_page(user_input)
+            while True:
+                print(f"\nPage menu for '{current_page['title']}':")
+                print("1. Page Summary")
+                print("2. Page Sections")
+                print("3. Page Links")
+                print("4. Page content")
+                print("0. Back")
 
-                    choice = input(input_prompt).strip()
+                choice = input(input_prompt).strip()
 
-                    if choice == "0": # Exit to main chatbot loop for a new search
-                        break  
-                    elif choice == "1": # Page Summary
-                        page_summary(page)
-                    elif choice == "2": # Page sections
-                        while True:
-                            page_sections(page)
-                            section_choice = int(input(input_prompt))
-                            if section_choice == 0: # Show the menu again
-                                break  
-                            else:
-                                page_section(page, section_choice)
-                                break
-                    elif choice == "3":
-                        print("Links for '" + page.title + "':")
-                        print(page.links)
-                    elif choice == "4":
-                        print("Content for '" + page.title + "':")
-                        print(page.content)
+                if choice == "0": # Exit to main chatbot loop for a new search
+                    break  
+                elif choice == "1": # Page Summary
+                    page_summary()
+                elif choice == "2": # Page sections
+                    while True:
+                        page_sections()
+                        section_choice = int(input(input_prompt))
+                        if section_choice == 0: # Show the menu again
+                            break  
+                        else:
+                            page_section(section_choice)
+                            break
+                elif choice == "3":
+                    print("Links for '" + current_page['title'] + "':")
+                    print(page.links)
+                elif choice == "4":
+                    print("Content for '" + current_page['title'] + "':")
+                    print(page.content)
 
 chatbot()
