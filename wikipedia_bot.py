@@ -85,9 +85,9 @@ def chatbot():
                             break
                 elif choice == "3":
                     print("Links for '" + current_page['title'] + "':")
-                    print(page.links)
+                    print(current_page['page'].links)
                 elif choice == "4":
                     print("Content for '" + current_page['title'] + "':")
-                    print(page.content)
+                    print(current_page['page'].content)
 
 chatbot()
